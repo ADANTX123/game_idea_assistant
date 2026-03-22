@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Idea Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-topline">
+        <p class="eyebrow">RAG + Eval + Runtime API</p>
+        <span id="heroModePill" class="hero-status">当前模式：mock</span>
+      </div>
+      <h1>游戏创意助手</h1>
+      <p class="hero-copy">输入一句游戏创意，系统会先检索案例，再生成结构化方案，最后给出自动 Eval 检查。现在你也可以直接接入真实 API，把它展示成一个更完整的 AI 应用工程作品。</p>
+      <div class="hero-pills">
+        <span>本地知识库</span>
+        <span>混合检索</span>
+        <span>结构化输出</span>
+        <span>自动评测</span>
+        <span>运行时 API 配置</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel settings-panel">
+        <div class="panel-head">
+          <h2>API 设置</h2>
+          <span id="settingsSummary" class="muted">读取中...</span>
+        </div>
+        <div class="settings-grid">
+          <label class="field">
+            <span>模式</span>
+            <select id="modeSelect">
+              <option value="mock">mock</option>
+              <option value="openai">openai-compatible</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>模型</span>
+            <input id="modelInput" type="text" placeholder="gpt-4.1-mini">
+          </label>
+          <label class="field field-wide">
+            <span>Base URL</span>
+            <input id="baseUrlInput" type="text" placeholder="https://api.openai.com/v1">
+          </label>
+          <label class="field field-wide">
+            <span>API Key</span>
+            <input id="apiKeyInput" type="password" placeholder="留空则保留已保存的 Key">
+          </label>
+          <label class="field">
+            <span>Temperature</span>
+            <input id="temperatureInput" type="number" step="0.1" min="0" max="2">
+          </label>
+          <label class="field">
+            <span>超时秒数</span>
+            <input id="timeoutInput" type="number" min="5" max="120">
+          </label>
+          <label class="field">
+            <span>最大输出 Token</span>
+            <input id="maxTokensInput" type="number" min="200" max="4000">
+          </label>
+        </div>
+        <div class="settings-actions">
+          <button id="saveSettingsBtn" class="primary-btn compact-btn">保存设置</button>
+          <button id="clearKeyBtn" class="ghost-btn compact-btn">清除已保存 Key</button>
+          <span id="apiKeyStatus" class="muted">Key 状态读取中...</span>
+        </div>
+      </section>
+
+      <section class="panel input-panel">
+        <div class="panel-head">
+          <h2>输入创意</h2>
+          <button id="sampleBtn" class="ghost-btn">填入示例</button>
+        </div>
+        <textarea id="ideaInput" placeholder="例如：做一个二次元塔防游戏，面向轻度玩家，强调爽感和养成。"></textarea>
+        <div class="input-actions">
+          <button id="generateBtn" class="primary-btn">生成方案</button>
+          <span id="statusText" class="status-text">等待输入。</span>
+        </div>
+      </section>
+
+      <section class="panel meta-panel">
+        <div class="panel-head">
+          <h2>运行状态</h2>
+          <span id="generatorMode" class="badge">mock</span>
+        </div>
+        <div id="metaGrid" class="meta-grid">
+          <article class="meta-card">
+            <span>当前状态</span>
+            <strong>等待运行</strong>
+          </article>
+        </div>
+        <div id="metaMessage" class="issues-box">这里会显示当前是否走了真实 API，以及回退原因。</div>
+      </section>
+
+      <section class="panel score-panel">
+        <div class="panel-head">
+          <h2>Eval 总览</h2>
+          <span id="logFile" class="muted"></span>
+        </div>
+        <div class="score-grid" id="scoreGrid">
+          <article class="score-card">
+            <span>总分</span>
+            <strong>--</strong>
+          </article>
+        </div>
+        <div id="issuesBox" class="issues-box">暂无评测问题。</div>
+      </section>
+
+      <section class="panel retrieval-panel">
+        <div class="panel-head">
+          <h2>RAG 检索结果</h2>
+          <span class="muted">Top 3 案例</span>
+        </div>
+        <div id="retrievalList" class="retrieval-list empty-state">生成后会显示匹配案例。</div>
+      </section>
+
+      <section class="panel plan-panel">
+        <div class="panel-head">
+          <h2>结构化方案</h2>
+          <span class="muted">便于面试时讲结构化输出和后续 Eval</span>
+        </div>
+        <div id="planCards" class="plan-cards empty-state">生成后会显示结构化结果。</div>
+      </section>
+
+      <section class="panel json-panel">
+        <div class="panel-head">
+          <h2>Raw JSON</h2>
+          <span class="muted">方便面试时展示原始响应</span>
+        </div>
+        <pre id="jsonOutput">{
+  "status": "waiting"
+}</pre>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="panel-head">
+          <h2>最近运行</h2>
+          <span class="muted">体现一点 LLMOps 思维</span>
+        </div>
+        <div id="historyList" class="history-list empty-state">暂无历史记录。</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

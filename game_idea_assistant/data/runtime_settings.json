@@ -1,0 +1,9 @@
+{
+  "mode": "mock",
+  "api_key": "",
+  "base_url": "https://api.openai.com/v1",
+  "model": "gpt-4.1-mini",
+  "temperature": 0.4,
+  "timeout_seconds": 25,
+  "max_output_tokens": 1400
+}
