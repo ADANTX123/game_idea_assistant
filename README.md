@@ -91,7 +91,7 @@ python app.py
 页面保存的运行时配置会写到：
 
 ```text
-G:\hanjia_work\game_idea_assistant\data\runtime_settings.json
+自己的路径\data\runtime_settings.json
 ```
 
 说明：
